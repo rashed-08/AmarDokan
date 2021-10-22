@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: configuration-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: git@github.com:rashed-08/config-server.git
+          clone-on-start: true
+server:
+  port: 8888

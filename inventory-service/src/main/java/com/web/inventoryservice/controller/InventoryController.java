@@ -18,6 +18,7 @@ public class InventoryController {
 	
 	@GetMapping("/{skuCode}")
 	public Boolean isInStock(@PathVariable String skuCode) {
-		Inventory inventory = repository.findBySkuCode(skuCode));
+		Inventory inventory = repository.findBySkuCode(skuCode);
+		return inventory.getStock() > 0;
 	}
 }

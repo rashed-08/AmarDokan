@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: inventory-service
+  config:
+    import:
+      - configserver:http://localhost:8888
+  datasource:
+    username: root
+    password: root
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+server:
+  port: 8282
+  
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "*"

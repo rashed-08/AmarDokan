@@ -3,6 +3,7 @@ package com.web.orderservice.controller;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +23,15 @@ public class OrderController {
 	@Autowired
 	private InventoryClient inventoryClient;
 	
+	@GetMapping
+	public String testHome() {
+		return "return from order service";
+	}
+	
 	@PostMapping
 	public String placeOrder(@RequestBody OrderDTO dto) {
 		boolean allProductInStock = dto.getOrderLineItems().stream().allMatch(orderLineItems -> inventoryClient.checkStock(orderLineItems.getSkuCode()));
-		
+		System.out.println("Working");
 		if (allProductInStock) {
 			Order order = new Order();
 			order.setOrderLineItems(dto.getOrderLineItems());

@@ -3,3 +3,15 @@ spring:
     config:
       uri:
         - http://localhost:8888
+#  security:
+#    oauth2:
+#      resourceserver:
+#         #jwt:
+#          issuer-uri: http://localhost:8080/auth/realms/microservice
+#          jwk-set-uri: http://localhost:8080/auth/realms/microservice/protocol/openid-connect/certs
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "*"

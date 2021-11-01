@@ -2,11 +2,13 @@ spring:
   application:
     name: api-gateway
   cloud:
+    discovery:
+      enabled: true
     loadbalancer:
       ribbon:
         enabled: false
     gateway:
-      default-filters:
+      default-filters: 
         - TokenRelay
       discovery:
         locator:
@@ -16,19 +18,28 @@ spring:
         - id: product-service
           uri: lb://product-service
           predicates:
-            - Path=/api/v1/product
+            - Path=/api/v1/product/**
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/v1/order/**
+#              Method=GET, POST, PUT, DELETE
   security:
     oauth2:
       client:
         provider:
           keycloak:
-            issuer-uri: http://localhost:8080/auth/realms/microservice
+            issuer-uri: http://localhost:8180/auth/realms/microservice
         registration:
           spring-cloud-gateway-client:
+            provider: keycloak
             client-id: spring-cloud-gateway-client
             client-secret: b15d3b25-7194-41a0-961a-ca8adf4e7fa2
-            provider: keycloak
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:9090/login/oauth2/code/spring-cloud-gateway-client
+            redirect-uri: "{baseUrl}/login/oauth2/code/spring-cloud-gateway-client"
+            #redirect-uri: http://localhost:9090/login/oauth2/code/spring-cloud-gateway-client
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/auth/realms/microservice/protocol/openid-connect/certs
 server:
-  port: 9090
+  port: 8080

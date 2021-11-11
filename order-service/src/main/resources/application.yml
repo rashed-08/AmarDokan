@@ -4,10 +4,6 @@ spring:
   config:
     import:
       - configserver:http://localhost:8888
-  cloud:
-    loadbalancer:
-      ribbon:
-        enabled: false
   datasource:
     username: root
     password: root

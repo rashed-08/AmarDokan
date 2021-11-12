@@ -1,8 +1,11 @@
 package com.web.orderservice.controller;
 
+import java.security.Principal;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,14 +27,15 @@ public class OrderController {
 	private InventoryClient inventoryClient;
 	
 	@GetMapping
-	public String testHome() {
-		return "return from order service";
+	public String testHome(OAuth2AuthenticatedPrincipal auth) {
+		
+		return "return from order service and users: " + auth.toString();
 	}
 	
 	@PostMapping
 	public String placeOrder(@RequestBody OrderDTO dto) {
 		boolean allProductInStock = dto.getOrderLineItems().stream().allMatch(orderLineItems -> inventoryClient.checkStock(orderLineItems.getSkuCode()));
-		System.out.println("Working");
+		
 		if (allProductInStock) {
 			Order order = new Order();
 			order.setOrderLineItems(dto.getOrderLineItems());

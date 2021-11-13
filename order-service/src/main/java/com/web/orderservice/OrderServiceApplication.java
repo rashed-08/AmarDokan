@@ -22,17 +22,4 @@ public class OrderServiceApplication {
 		SpringApplication.run(OrderServiceApplication.class, args);
 	}
 
-//	@Bean
-//	public RequestInterceptor requestTokenBearerInterceptor() {
-//		String token =  ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
-//		return requestTemplate -> {
-////			JwtAuthenticationToken token =  (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-////			System.out.println("Token: " + token.getToken().getTokenValue());
-////			requestTemplate.header("Authorization", "Bearer " + token.getToken().getTokenValue());
-////			var token = SecurityContextHolder.getContext().getAuthentication();
-//			requestTemplate.header("Authorization", token);
-////			requestTemplate.header("Authorization", "Bearer " + OAuth2AuthenticatedPrincipal token.getToken().getTokenValue());
-//		};
-//	}
-
 }

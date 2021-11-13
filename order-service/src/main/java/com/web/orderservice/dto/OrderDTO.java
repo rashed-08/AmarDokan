@@ -24,4 +24,9 @@ public class OrderDTO {
 		this.orderLineItems = orderLineItems;
 	}
 
+	@Override
+	public String toString() {
+		return "OrderDTO [orderLineItems=" + orderLineItems + "]";
+	}
+
 }

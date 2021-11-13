@@ -1,12 +1,8 @@
 package com.web.orderservice.controller;
 
-import java.security.Principal;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,25 +13,23 @@ import com.web.orderservice.dto.OrderDTO;
 import com.web.orderservice.model.Order;
 import com.web.orderservice.repository.OrderRepository;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 @RestController
 @RequestMapping("/api/v1/order")
+
 public class OrderController {
 
 	@Autowired
 	private OrderRepository repository;
 	@Autowired
 	private InventoryClient inventoryClient;
-	
-	@GetMapping
-	public String testHome(OAuth2AuthenticatedPrincipal auth) {
-		
-		return "return from order service and users: " + auth.toString();
-	}
-	
+
 	@PostMapping
+	@CircuitBreaker(name = "orderService", fallbackMethod = "handleErrorCase")
 	public String placeOrder(@RequestBody OrderDTO dto) {
 		boolean allProductInStock = dto.getOrderLineItems().stream().allMatch(orderLineItems -> inventoryClient.checkStock(orderLineItems.getSkuCode()));
-		
+		System.out.println("all product: " + allProductInStock);
 		if (allProductInStock) {
 			Order order = new Order();
 			order.setOrderLineItems(dto.getOrderLineItems());
@@ -47,4 +41,9 @@ public class OrderController {
 			return "Order failed, One of the product is the order is not in stock.";
 		}
 	}
+
+	public String handleErrorCase(OrderDTO dto, RuntimeException e) {
+		return "Place order fallback method.";
+	}
+
 }

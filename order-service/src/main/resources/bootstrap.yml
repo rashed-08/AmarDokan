@@ -6,6 +6,11 @@ spring:
     loadbalancer:
       ribbon:
         enabled: false
+    stream:
+      source: notificationEventSupplier
+      bindings:
+        notificationEventSupplier-out-0:
+          destination: notification-events
   security:
     oauth2:
       resourceserver:

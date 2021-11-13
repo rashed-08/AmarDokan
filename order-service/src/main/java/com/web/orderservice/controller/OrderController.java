@@ -1,5 +1,6 @@
 package com.web.orderservice.controller;
 
+import java.security.Principal;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,6 @@ public class OrderController {
 	@CircuitBreaker(name = "orderService", fallbackMethod = "handleErrorCase")
 	public String placeOrder(@RequestBody OrderDTO dto) {
 		boolean allProductInStock = dto.getOrderLineItems().stream().allMatch(orderLineItems -> inventoryClient.checkStock(orderLineItems.getSkuCode()));
-		System.out.println("all product: " + allProductInStock);
 		if (allProductInStock) {
 			Order order = new Order();
 			order.setOrderLineItems(dto.getOrderLineItems());

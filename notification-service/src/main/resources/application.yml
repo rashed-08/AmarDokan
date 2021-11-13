@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: notification-service
+  cloud:
+    stream:
+      source: notificationEventSupplier
+      bindings:
+        notificationEventSupplier-in-0:
+          destination: notification-events

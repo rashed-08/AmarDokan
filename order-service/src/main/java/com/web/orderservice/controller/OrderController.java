@@ -1,9 +1,9 @@
 package com.web.orderservice.controller;
 
-import java.security.Principal;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +25,8 @@ public class OrderController {
 	private OrderRepository repository;
 	@Autowired
 	private InventoryClient inventoryClient;
+	@Autowired
+	private StreamBridge streamBridge;
 
 	@PostMapping
 	@CircuitBreaker(name = "orderService", fallbackMethod = "handleErrorCase")
@@ -34,8 +36,10 @@ public class OrderController {
 			Order order = new Order();
 			order.setOrderLineItems(dto.getOrderLineItems());
 			order.setOrderNumber(UUID.randomUUID().toString());
-			
 			repository.save(order);
+			
+			streamBridge.send("notificationEventSupplier-out-0", order.getId());
+			
 			return "Order place successfully.";
 		} else {
 			return "Order failed, One of the product is the order is not in stock.";

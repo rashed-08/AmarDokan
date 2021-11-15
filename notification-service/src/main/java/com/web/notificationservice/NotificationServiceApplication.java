@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.messaging.Message;
 
 @SpringBootApplication
 @EnableEurekaClient
@@ -16,9 +17,9 @@ public class NotificationServiceApplication {
 	}
 	
 	@Bean
-	public Consumer<String> notificationEventSupplier() {
+	public Consumer<Message<String>> notificationEventSupplier() {
 		return message -> {
-			new EmailSender().sendEmail(message);
+			new EmailSender().sendEmail(message.getPayload());
 		};
 	}
 

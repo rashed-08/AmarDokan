@@ -17,6 +17,9 @@ spring:
         jwt:
 #          issuer-uri: http://localhost:8180/auth/realms/microservice
           jwk-set-uri: http://localhost:8180/auth/realms/microservice/protocol/openid-connect/certs
+  sleuth:
+    integration:
+      enabled: true
 management:
   health:
     circuitbreakers:
